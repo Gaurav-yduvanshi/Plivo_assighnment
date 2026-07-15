@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LLM Speedrun Summary</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f1e8;
+      --panel: #fffdf7;
+      --text: #181614;
+      --muted: #615b52;
+      --accent: #0f766e;
+      --line: #e5dccb;
+    }
+    body {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      background: radial-gradient(circle at top, #fffdf9 0%, var(--bg) 62%, #eadfc9 100%);
+      color: var(--text);
+      line-height: 1.55;
+    }
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 48px 20px 64px;
+    }
+    .card {
+      background: rgba(255, 253, 247, 0.96);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 28px 30px;
+      box-shadow: 0 20px 60px rgba(44, 36, 20, 0.08);
+    }
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      letter-spacing: -0.03em;
+    }
+    h2 {
+      margin: 28px 0 10px;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+    }
+    p, li { color: var(--text); }
+    .muted { color: var(--muted); }
+    ul { margin: 10px 0 0 20px; padding: 0; }
+    .metric {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+    .metric div {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px;
+    }
+    .metric strong { display: block; font-size: 1.4rem; margin-top: 6px; }
+    code {
+      background: #f1ead8;
+      padding: 0.15rem 0.35rem;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="card">
+      <h1>LLM Speedrun Summary</h1>
+      <p class="muted">Final submission snapshot for the 2,000-step GPT-from-scratch speedrun.</p>
+
+      <div class="metric">
+        <div><span>Dev bpb</span><strong>2.1009</strong></div>
+        <div><span>Parameters</span><strong>1,913,280</strong></div>
+        <div><span>Training steps</span><strong>2,000</strong></div>
+      </div>
+
+      <h2>What changed</h2>
+      <ul>
+        <li>The tokenizer was replaced with a corpus-trained byte-fallback tokenizer that learns frequent UTF-8 substrings and keeps exact round-tripping.</li>
+        <li>The model uses tied embeddings and a slightly better capacity allocation under the 2M parameter cap.</li>
+        <li>The trainer now uses AdamW, warmup plus cosine decay, and gradient clipping.</li>
+      </ul>
+
+      <h2>Why it worked</h2>
+      <p>The biggest gain came from reducing token count on mixed English/Hindi text, which let the fixed 2,000-step budget cover more raw bytes of the corpus. The optimizer changes then stabilized the run enough for the model to make use of the better tokenization.</p>
+
+      <h2>Files</h2>
+      <ul>
+        <li><code>ckpt.pt</code> final checkpoint</li>
+        <li><code>tokenizer.json</code> learned tokenizer artifact</li>
+        <li><code>RUNLOG.md</code> experiment log</li>
+        <li><code>NOTES.md</code> final configuration notes</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
