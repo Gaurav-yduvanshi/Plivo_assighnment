@@ -11,7 +11,7 @@ import torch.nn.functional as F
 
 class Config:
     vocab_size = 256      # byte-level tokenizer default
-    block_size = 128
+    block_size = 512
     n_layer = 5
     n_head = 4
     n_embd = 128
